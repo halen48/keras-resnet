@@ -26,7 +26,7 @@ class ResNet3D(keras.Model):
 
     :param block: a residual block (e.g. an instance of `keras_resnet.blocks.basic_3d`)
 
-    :param include_top: if true, includes classification layers
+    :param include_top: if 2, includes classification layers, if 1, include the features of classification layer
 
     :param classes: number of classes to classify (include_top must be true)
 
@@ -58,7 +58,7 @@ class ResNet3D(keras.Model):
         inputs,
         blocks,
         block,
-        include_top=1,
+        include_top=2,
         classes=1000,
         freeze_bn=True,
         numerical_names=None,
