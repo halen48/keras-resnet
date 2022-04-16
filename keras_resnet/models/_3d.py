@@ -58,7 +58,7 @@ class ResNet3D(keras.Model):
         inputs,
         blocks,
         block,
-        include_top=True,
+        include_top=1,
         classes=1000,
         freeze_bn=True,
         numerical_names=None,
@@ -97,11 +97,12 @@ class ResNet3D(keras.Model):
 
             outputs.append(x)
 
-        if include_top:
+        if include_top > 0:
             assert classes > 0
-
+            
             x = keras.layers.GlobalAveragePooling3D(name="pool5")(x)
-            x = keras.layers.Dense(classes, activation="softmax", name="fc1000")(x)
+            if(include_top == 2):
+                x = keras.layers.Dense(classes, activation="softmax", name="fc1000")(x)
 
             super(ResNet3D, self).__init__(inputs=inputs, outputs=x, *args, **kwargs)
         else:
