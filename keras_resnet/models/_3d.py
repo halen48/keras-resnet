@@ -102,7 +102,11 @@ class ResNet3D(keras.Model):
             
             x = keras.layers.GlobalAveragePooling3D(name="pool5")(x)
             if(include_top == 2):
-                x = keras.layers.Dense(classes, activation="softmax", name="fc1000")(x)
+                if(classes == 1):
+                    activation='sigmoid'
+                else:
+                    activation='softmax'
+                x = keras.layers.Dense(classes, activation=activation, name="fc%d"%classes)(x)
 
             super(ResNet3D, self).__init__(inputs=inputs, outputs=x, *args, **kwargs)
         else:
