@@ -62,6 +62,7 @@ class ResNet3D(keras.Model):
         classes=1000,
         freeze_bn=True,
         numerical_names=None,
+        dropout = 0,
         *args,
         **kwargs
     ):
@@ -107,6 +108,8 @@ class ResNet3D(keras.Model):
                 else:
                     activation='softmax'
                 x = keras.layers.Dense(classes, activation=activation, name="fc%d"%classes)(x)
+                if(dropout > 0):
+                    x = keras.layers.Dropout(dropout)(x)
 
             super(ResNet3D, self).__init__(inputs=inputs, outputs=x, *args, **kwargs)
         else:
