@@ -167,7 +167,7 @@ def bottleneck_3d(
 
         y = keras.layers.Conv3D(filters * 4, (1, 1, 1), use_bias=False, name="res{}{}_branch2c{}".format(stage_char, block_char, model_index), **parameters)(y)
 
-        y = keras_resnet.layers.BatchNormalization(axis=axis, epsilon=1e-5, freeze=freeze_bn, name="bn{}{}_branch2c{}".format(stage_char, block_cha, model_indexr))(y)
+        y = keras_resnet.layers.BatchNormalization(axis=axis, epsilon=1e-5, freeze=freeze_bn, name="bn{}{}_branch2c{}".format(stage_char, block_char, model_indexr))(y)
 
         if block == 0:
             shortcut = keras.layers.Conv3D(filters * 4, (1, 1, 1), strides=stride, use_bias=False, name="res{}{}_branch1{}".format(stage_char, block_char), **parameters)(x)
