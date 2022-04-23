@@ -63,6 +63,7 @@ class ResNet3D(keras.Model):
         freeze_bn=True,
         numerical_names=None,
         dropout = 0,
+        model_index = 0,
         *args,
         **kwargs
     ):
@@ -74,11 +75,11 @@ class ResNet3D(keras.Model):
         if numerical_names is None:
             numerical_names = [True] * len(blocks)
 
-        x = keras.layers.ZeroPadding3D(padding=3, name="padding_conv1")(inputs)
-        x = keras.layers.Conv3D(64, (7, 7, 7), strides=(2, 2, 2), use_bias=False, name="conv1")(x)
-        x = keras_resnet.layers.BatchNormalization(axis=axis, epsilon=1e-5, freeze=freeze_bn, name="bn_conv1")(x)
-        x = keras.layers.Activation("relu", name="conv1_relu")(x)
-        x = keras.layers.MaxPooling3D((3, 3, 3), strides=(2, 2, 2), padding="same", name="pool1")(x)
+        x = keras.layers.ZeroPadding3D(padding=3, name="padding_conv1"+str(model_index))(inputs)
+        x = keras.layers.Conv3D(64, (7, 7, 7), strides=(2, 2, 2), use_bias=False, name="conv1"+str(model_index))(x)
+        x = keras_resnet.layers.BatchNormalization(axis=axis, epsilon=1e-5, freeze=freeze_bn, name="bn_conv1"+str(model_index))(x)
+        x = keras.layers.Activation("relu", name="conv1_relu"+str(model_index))(x)
+        x = keras.layers.MaxPooling3D((3, 3, 3), strides=(2, 2, 2), padding="same", name="pool1"+str(model_index))(x)
 
         features = 64
 
@@ -101,7 +102,7 @@ class ResNet3D(keras.Model):
         if include_top > 0:
             assert classes > 0
             
-            x = keras.layers.GlobalAveragePooling3D(name="pool5")(x)
+            x = keras.layers.GlobalAveragePooling3D(name="pool5"+str(model_index))(x)
             if(include_top == 2):
                 if(dropout > 0):
                     x = keras.layers.Dropout(dropout)(x)
@@ -109,7 +110,7 @@ class ResNet3D(keras.Model):
                     activation='sigmoid'
                 else:
                     activation='softmax'
-                x = keras.layers.Dense(classes, activation=activation, name="fc%d"%classes)(x)
+                x = keras.layers.Dense(classes, activation=activation, name=("fc%d"%classes)+str(model_index))(x)
 
             super(ResNet3D, self).__init__(inputs=inputs, outputs=x, *args, **kwargs)
         else:
