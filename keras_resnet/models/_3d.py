@@ -91,6 +91,7 @@ class ResNet3D(keras.Model):
                     features,
                     stage_id,
                     block_id,
+                    model_index = model_index,
                     numerical_name=(block_id > 0 and numerical_names[stage_id]),
                     freeze_bn=freeze_bn
                 )(x)
